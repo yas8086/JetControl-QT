@@ -51,6 +51,7 @@ private slots:
     void on_pushButtonReset_clicked();
 //    void timeoutSendData();
     void slotrevserialmsg();
+    void on_windowTopButton_clicked(bool checked);
 };
 
 #endif // MAINWINDOW_H

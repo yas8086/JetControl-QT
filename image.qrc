@@ -1,16 +1,9 @@
 <RCC>
     <qresource prefix="/">
-        <file>img/logo.png</file>
-        <file>img/打开串口.png</file>
-        <file>img/电动车.png</file>
-        <file>img/电动车背景.png</file>
-        <file>img/电动车标题.png</file>
-        <file>img/覆盖.png</file>
-        <file>img/关闭串口.png</file>
-        <file>img/贴图.png</file>
-        <file>img/微信图片_20230726091617.png</file>
-        <file>img/选中0.png</file>
-        <file>img/选中1.png</file>
-        <file>img/主界面.jpg</file>
+        <file>img/btncheckoff2.png</file>
+        <file>img/btncheckon2.png</file>
+        <file>img/窗口置顶.png</file>
+        <file>img/已置顶.png</file>
+        <file>Logo.ico</file>
     </qresource>
 </RCC>

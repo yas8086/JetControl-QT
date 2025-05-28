@@ -48,6 +48,7 @@ public:
     QComboBox *comboBoxSerial;
     QPushButton *pushButtonSerial;
     QSpacerItem *horizontalSpacer_3;
+    QPushButton *windowTopButton;
     QGroupBox *gridGroupBox;
     QGridLayout *gridLayout_6;
     QHBoxLayout *horizontalLayout;
@@ -58,7 +59,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(250, 277);
+        MainWindow->resize(355, 277);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -135,13 +136,48 @@ public:
 
         pushButtonSerial = new QPushButton(GroupBoxSeries);
         pushButtonSerial->setObjectName(QStringLiteral("pushButtonSerial"));
-        pushButtonSerial->setStyleSheet(QStringLiteral(""));
+        pushButtonSerial->setMinimumSize(QSize(52, 17));
+        pushButtonSerial->setMaximumSize(QSize(52, 17));
+        pushButtonSerial->setStyleSheet(QLatin1String("QPushButton\n"
+"{\n"
+"border-image: url(:/img/btncheckoff2.png);\n"
+"}\n"
+"QPushButton::checked\n"
+"{\n"
+"border-image: url(:/img/btncheckon2.png);\n"
+"}\n"
+"QPushButton::unchecked\n"
+"{\n"
+"border-image: url(:/img/btncheckoff2.png);\n"
+"}"));
+        pushButtonSerial->setIconSize(QSize(87, 28));
 
         horizontalLayout_4->addWidget(pushButtonSerial);
 
         horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_4->addItem(horizontalSpacer_3);
+
+        windowTopButton = new QPushButton(GroupBoxSeries);
+        windowTopButton->setObjectName(QStringLiteral("windowTopButton"));
+        windowTopButton->setEnabled(true);
+        windowTopButton->setMinimumSize(QSize(17, 17));
+        windowTopButton->setMaximumSize(QSize(17, 17));
+        windowTopButton->setStyleSheet(QString::fromUtf8("QPushButton\n"
+"{\n"
+"border-image: url(:/img/\347\252\227\345\217\243\347\275\256\351\241\266.png);\n"
+"}\n"
+"QPushButton::checked\n"
+"{\n"
+"border-image: url(:/img/\345\267\262\347\275\256\351\241\266.png);\n"
+"}\n"
+"QPushButton::unchecked\n"
+"{\n"
+"border-image: url(:/img/\347\252\227\345\217\243\347\275\256\351\241\266.png);\n"
+"}"));
+        windowTopButton->setCheckable(true);
+
+        horizontalLayout_4->addWidget(windowTopButton);
 
 
         gridLayout_4->addLayout(horizontalLayout_4, 0, 0, 1, 1);
@@ -191,7 +227,8 @@ public:
         pushButtonPowderPump->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200", Q_NULLPTR));
         GroupBoxSeries->setTitle(QApplication::translate("MainWindow", "\344\270\262\345\217\243\350\256\276\347\275\256", Q_NULLPTR));
         label_3->setText(QApplication::translate("MainWindow", "\351\200\211\346\213\251\344\270\262\345\217\243", Q_NULLPTR));
-        pushButtonSerial->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200", Q_NULLPTR));
+        pushButtonSerial->setText(QString());
+        windowTopButton->setText(QString());
         gridGroupBox->setTitle(QApplication::translate("MainWindow", "\345\244\215\344\275\215\346\216\247\345\210\266", Q_NULLPTR));
         label_6->setText(QApplication::translate("MainWindow", "\345\244\215\344\275\215", Q_NULLPTR));
         pushButtonReset->setText(QApplication::translate("MainWindow", "\345\205\250\351\203\250\345\205\263\351\227\255", Q_NULLPTR));

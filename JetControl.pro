@@ -39,21 +39,22 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES += \
-    ../../WriteIDcard_UAV/img/打开串口.png \
-    img/打开串口.png \
-    img/主界面.jpg \
-    img/logo.png \
-    img/关闭串口.png \
-    img/微信图片_20230726091617.png \
-    img/打开串口.png \
-    img/电动车.png \
-    img/电动车标题.png \
-    img/电动车背景.png \
-    img/覆盖.png \
-    img/贴图.png \
-    img/选中0.png \
-    img/选中1.png
+#DISTFILES += \
+#    img/打开串口.png \
+#    img/主界面.jpg \
+#    img/关闭串口.png \
+#    img/微信图片_20230726091617.png \
+#    img/打开串口.png \
+#    img/电动车.png \
+#    img/电动车标题.png \
+#    img/电动车背景.png \
+#    img/覆盖.png \
+#    img/贴图.png \
+#    img/选中0.png \
+#    img/选中1.png
 
 RESOURCES += \
     image.qrc
+
+RC_FILE += logo.rc
+

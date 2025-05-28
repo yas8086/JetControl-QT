@@ -7,9 +7,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-
     ui->setupUi(this);
     setWindowTitle("喷烟控制程序");
+    setWindowIcon(QIcon(":/Logo.ico"));
     //串口相关
     serialIsOpen = false;
     foreach(const QSerialPortInfo &info,QSerialPortInfo::availablePorts())
@@ -222,12 +222,12 @@ void MainWindow::on_pushButtonSerial_clicked(bool checked)
         else {
             serialIsOpen = true;
             QMessageBox::information(nullptr,"提示","串口打开成功");
-            ui->pushButtonSerial->setText("点击关闭");
+//            ui->pushButtonSerial->setText("点击关闭");
         }
     }else {
         serial.close();
         serialIsOpen = false;
-        ui->pushButtonSerial->setText("打开");
+//        ui->pushButtonSerial->setText("打开");
     }
 }
 ////油泵按钮设置 deviceId:1
@@ -310,6 +310,12 @@ void MainWindow::on_pushButtonReset_clicked()
     else {
         QMessageBox::information(nullptr,"提示","复位失败，串口未打开");
     }
+}
+//窗口置顶按钮槽函数
+void MainWindow::on_windowTopButton_clicked(bool checked)
+{
+    setWindowFlag(Qt::WindowStaysOnTopHint, checked);
+    show();
 }
 //16位CRC校验
 uint16_t MainWindow::crc16Calc(uint8_t *data, uint8_t len) {
