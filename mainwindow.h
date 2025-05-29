@@ -44,9 +44,11 @@ private:
 private slots:
     void on_pushButtonSerial_clicked(bool checked);
 //    void on_pushButtonOilPump_clicked(bool checked);
-    void on_pushButtonWaterPump_clicked(bool checked);
+    void on_pushButtonWaterPump_clicked();
+    void on_pushButtonWaterPumpOff_clicked();
 //    void on_pushButtonPowderValue_clicked();
-    void on_pushButtonPowderPump_clicked(bool checked);
+    void on_pushButtonPowderPump_clicked();
+    void on_pushButtonPowderPumpOff_clicked();
 //    void on_pushButtonEngine_clicked();
     void on_pushButtonReset_clicked();
 //    void timeoutSendData();

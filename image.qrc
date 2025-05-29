@@ -5,5 +5,7 @@
         <file>img/窗口置顶.png</file>
         <file>img/已置顶.png</file>
         <file>Logo.ico</file>
+        <file>img/指示灯-红.png</file>
+        <file>img/指示灯-绿.png</file>
     </qresource>
 </RCC>

@@ -210,6 +210,7 @@ Makefile: ../JetControl.pro D:/Software/QT/5.9.8/mingw53_32/mkspecs/win32-g++/qm
 		D:/Software/QT/5.9.8/mingw53_32/mkspecs/features/qt_config.prf \
 		D:/Software/QT/5.9.8/mingw53_32/mkspecs/win32-g++/qmake.conf \
 		D:/Software/QT/5.9.8/mingw53_32/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		D:/Software/QT/5.9.8/mingw53_32/mkspecs/features/exclusive_builds.prf \
 		D:/Software/QT/5.9.8/mingw53_32/mkspecs/features/toolchain.prf \
 		D:/Software/QT/5.9.8/mingw53_32/mkspecs/features/default_pre.prf \
@@ -387,6 +388,7 @@ D:/Software/QT/5.9.8/mingw53_32/mkspecs/features/qt_functions.prf:
 D:/Software/QT/5.9.8/mingw53_32/mkspecs/features/qt_config.prf:
 D:/Software/QT/5.9.8/mingw53_32/mkspecs/win32-g++/qmake.conf:
 D:/Software/QT/5.9.8/mingw53_32/mkspecs/features/spec_post.prf:
+.qmake.stash:
 D:/Software/QT/5.9.8/mingw53_32/mkspecs/features/exclusive_builds.prf:
 D:/Software/QT/5.9.8/mingw53_32/mkspecs/features/toolchain.prf:
 D:/Software/QT/5.9.8/mingw53_32/mkspecs/features/default_pre.prf:

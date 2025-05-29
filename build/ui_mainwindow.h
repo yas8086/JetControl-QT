@@ -36,10 +36,14 @@ public:
     QHBoxLayout *horizontalLayout_3;
     QLabel *label_4;
     QPushButton *pushButtonWaterPump;
+    QPushButton *pushButtonWaterPumpOff;
+    QPushButton *pushButtonWaterLED;
     QSpacerItem *horizontalSpacer_4;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label_2;
     QPushButton *pushButtonPowderPump;
+    QPushButton *pushButtonPowderPumpOff;
+    QPushButton *pushButtonPowderLED;
     QSpacerItem *horizontalSpacer_2;
     QGroupBox *GroupBoxSeries;
     QGridLayout *gridLayout_4;
@@ -54,12 +58,13 @@ public:
     QHBoxLayout *horizontalLayout;
     QLabel *label_6;
     QPushButton *pushButtonReset;
+    QSpacerItem *horizontalSpacer;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(355, 277);
+        MainWindow->resize(1010, 277);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -85,6 +90,32 @@ public:
 
         horizontalLayout_3->addWidget(pushButtonWaterPump);
 
+        pushButtonWaterPumpOff = new QPushButton(GroupBoxValve);
+        pushButtonWaterPumpOff->setObjectName(QStringLiteral("pushButtonWaterPumpOff"));
+
+        horizontalLayout_3->addWidget(pushButtonWaterPumpOff);
+
+        pushButtonWaterLED = new QPushButton(GroupBoxValve);
+        pushButtonWaterLED->setObjectName(QStringLiteral("pushButtonWaterLED"));
+        pushButtonWaterLED->setEnabled(false);
+        pushButtonWaterLED->setMinimumSize(QSize(35, 35));
+        pushButtonWaterLED->setMaximumSize(QSize(35, 35));
+        pushButtonWaterLED->setStyleSheet(QString::fromUtf8("QPushButton\n"
+"{\n"
+"border-image: url(:/img/\346\214\207\347\244\272\347\201\257-\347\272\242.png);\n"
+"}\n"
+"QPushButton::checked\n"
+"{\n"
+"border-image: url(:/img/\346\214\207\347\244\272\347\201\257-\347\273\277.png);\n"
+"}\n"
+"QPushButton::unchecked\n"
+"{\n"
+"border-image: url(:/img/\346\214\207\347\244\272\347\201\257-\347\272\242.png);\n"
+"}"));
+        pushButtonWaterLED->setCheckable(true);
+
+        horizontalLayout_3->addWidget(pushButtonWaterLED);
+
         horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_3->addItem(horizontalSpacer_4);
@@ -104,6 +135,32 @@ public:
         pushButtonPowderPump->setObjectName(QStringLiteral("pushButtonPowderPump"));
 
         horizontalLayout_2->addWidget(pushButtonPowderPump);
+
+        pushButtonPowderPumpOff = new QPushButton(GroupBoxValve);
+        pushButtonPowderPumpOff->setObjectName(QStringLiteral("pushButtonPowderPumpOff"));
+
+        horizontalLayout_2->addWidget(pushButtonPowderPumpOff);
+
+        pushButtonPowderLED = new QPushButton(GroupBoxValve);
+        pushButtonPowderLED->setObjectName(QStringLiteral("pushButtonPowderLED"));
+        pushButtonPowderLED->setEnabled(false);
+        pushButtonPowderLED->setMinimumSize(QSize(35, 35));
+        pushButtonPowderLED->setMaximumSize(QSize(35, 35));
+        pushButtonPowderLED->setStyleSheet(QString::fromUtf8("QPushButton\n"
+"{\n"
+"border-image: url(:/img/\346\214\207\347\244\272\347\201\257-\347\272\242.png);\n"
+"}\n"
+"QPushButton::checked\n"
+"{\n"
+"border-image: url(:/img/\346\214\207\347\244\272\347\201\257-\347\273\277.png);\n"
+"}\n"
+"QPushButton::unchecked\n"
+"{\n"
+"border-image: url(:/img/\346\214\207\347\244\272\347\201\257-\347\272\242.png);\n"
+"}"));
+        pushButtonPowderLED->setCheckable(true);
+
+        horizontalLayout_2->addWidget(pushButtonPowderLED);
 
         horizontalSpacer_2 = new QSpacerItem(5, 5, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -136,8 +193,8 @@ public:
 
         pushButtonSerial = new QPushButton(GroupBoxSeries);
         pushButtonSerial->setObjectName(QStringLiteral("pushButtonSerial"));
-        pushButtonSerial->setMinimumSize(QSize(52, 17));
-        pushButtonSerial->setMaximumSize(QSize(52, 17));
+        pushButtonSerial->setMinimumSize(QSize(77, 25));
+        pushButtonSerial->setMaximumSize(QSize(77, 25));
         pushButtonSerial->setStyleSheet(QLatin1String("QPushButton\n"
 "{\n"
 "border-image: url(:/img/btncheckoff2.png);\n"
@@ -161,8 +218,8 @@ public:
         windowTopButton = new QPushButton(GroupBoxSeries);
         windowTopButton->setObjectName(QStringLiteral("windowTopButton"));
         windowTopButton->setEnabled(true);
-        windowTopButton->setMinimumSize(QSize(17, 17));
-        windowTopButton->setMaximumSize(QSize(17, 17));
+        windowTopButton->setMinimumSize(QSize(25, 25));
+        windowTopButton->setMaximumSize(QSize(25, 25));
         windowTopButton->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "border-image: url(:/img/\347\252\227\345\217\243\347\275\256\351\241\266.png);\n"
@@ -204,6 +261,10 @@ public:
 
         horizontalLayout->addWidget(pushButtonReset);
 
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer);
+
 
         gridLayout_6->addLayout(horizontalLayout, 0, 0, 1, 1);
 
@@ -223,8 +284,12 @@ public:
         GroupBoxValve->setTitle(QApplication::translate("MainWindow", "\351\230\200\351\227\250\345\274\200\345\205\263", Q_NULLPTR));
         label_4->setText(QApplication::translate("MainWindow", "\346\260\264\346\263\265", Q_NULLPTR));
         pushButtonWaterPump->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200", Q_NULLPTR));
+        pushButtonWaterPumpOff->setText(QApplication::translate("MainWindow", "\345\205\263\351\227\255", Q_NULLPTR));
+        pushButtonWaterLED->setText(QString());
         label_2->setText(QApplication::translate("MainWindow", "\347\262\211\351\230\200", Q_NULLPTR));
         pushButtonPowderPump->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200", Q_NULLPTR));
+        pushButtonPowderPumpOff->setText(QApplication::translate("MainWindow", "\345\205\263\351\227\255", Q_NULLPTR));
+        pushButtonPowderLED->setText(QString());
         GroupBoxSeries->setTitle(QApplication::translate("MainWindow", "\344\270\262\345\217\243\350\256\276\347\275\256", Q_NULLPTR));
         label_3->setText(QApplication::translate("MainWindow", "\351\200\211\346\213\251\344\270\262\345\217\243", Q_NULLPTR));
         pushButtonSerial->setText(QString());

@@ -20,9 +20,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->comboBoxSerial->installEventFilter(this);
     connect(&serial,SIGNAL(readyRead()),this,SLOT(slotrevserialmsg()));
     //粉阀
-    ui->pushButtonPowderPump->setCheckable(true);
+//    ui->pushButtonPowderPump->setCheckable(true);
+    ui->pushButtonPowderLED->setEnabled(false); // 禁用按钮
     //水泵
-    ui->pushButtonWaterPump->setCheckable(true);
+//    ui->pushButtonWaterPump->setCheckable(true);
+    ui->pushButtonWaterLED->setEnabled(false); // 禁用按钮
     //粉阀
     //信号和槽连接QSpinbox&QSlider，使两者的值相互变化。
 //    ui->spinBoxPowderValue->setRange(0,100);
@@ -131,15 +133,15 @@ void MainWindow::slotrevserialmsg()
 //                ui->pushButtonOilPump->setChecked(true);
 //                break;
             case 2:
-                ui->pushButtonWaterPump->setChecked(true);
+//                ui->pushButtonWaterPump->setChecked(true);
                 break;
             case 3:
-                ui->pushButtonPowderPump->setChecked(true);
+//                ui->pushButtonPowderPump->setChecked(true);
                 break;
             default:
                 break;
             }
-            QMessageBox::information(nullptr,"提示","打开失败，请重试！");
+//            QMessageBox::information(nullptr,"提示","打开失败，请重试！");
             break;
           //油泵
 //        case 1:
@@ -157,24 +159,28 @@ void MainWindow::slotrevserialmsg()
         case 2:
             if(deviceValue==1)
             {
-                QMessageBox::information(nullptr,"提示","水泵打开成功");
-                ui->pushButtonWaterPump->setChecked(true);
-                ui->pushButtonWaterPump->setText("水泵已开启，点击关闭");
+//                QMessageBox::information(nullptr,"提示","水泵打开成功");
+//                ui->pushButtonWaterPump->setChecked(true);
+                ui->pushButtonWaterLED->setChecked(true);
+//                ui->pushButtonWaterPump->setText("水泵已开启，点击关闭");
             }
             else {
-                ui->pushButtonWaterPump->setText("打开");
+//                ui->pushButtonWaterPump->setText("打开");
+                ui->pushButtonWaterLED->setChecked(false);
             }
             break;
         //粉阀
         case 3:
             if(deviceValue==1)
             {
-                QMessageBox::information(nullptr,"提示","粉阀打开成功");
-                ui->pushButtonPowderPump->setChecked(true);
-                ui->pushButtonPowderPump->setText("粉阀已开启，点击关闭");
+//                QMessageBox::information(nullptr,"提示","粉阀打开成功");
+//                ui->pushButtonPowderPump->setChecked(true);
+                ui->pushButtonPowderLED->setChecked(true);
+//                ui->pushButtonPowderPump->setText("粉阀已开启，点击关闭");
             }
             else {
                 ui->pushButtonPowderPump->setText("打开");
+                ui->pushButtonPowderLED->setChecked(false);
             }
             break;
         //发动机
@@ -186,15 +192,17 @@ void MainWindow::slotrevserialmsg()
 //            ui->pushButtonOilPump->setChecked(false);
 //            ui->pushButtonOilPump->setText("打开");
             //水泵
-            ui->pushButtonWaterPump->setChecked(false);
-            ui->pushButtonWaterPump->setText("打开");
+//            ui->pushButtonWaterPump->setChecked(false);
+            ui->pushButtonWaterLED->setChecked(false);
+//            ui->pushButtonWaterPump->setText("打开");
             //粉阀
 //            ui->spinBoxPowderValue->setValue(0);
-            ui->pushButtonPowderPump->setChecked(false);
-            ui->pushButtonPowderPump->setText("打开");
+//            ui->pushButtonPowderPump->setChecked(false);
+            ui->pushButtonPowderLED->setChecked(false);
+//            ui->pushButtonPowderPump->setText("打开");
             //发动机
 //            ui->spinBoxEngine->setValue(0);
-            QMessageBox::information(nullptr,"提示","复位成功");
+//            QMessageBox::information(nullptr,"提示","复位成功");
             break;
         default:
             break;
@@ -247,48 +255,45 @@ void MainWindow::on_pushButtonSerial_clicked(bool checked)
 //    ui->pushButtonOilPump->setChecked(false);
 //}
 //水泵按钮设置 deviceId:2
-void MainWindow::on_pushButtonWaterPump_clicked(bool checked)
+void MainWindow::on_pushButtonWaterPump_clicked()
 {
     if(serialIsOpen==true)
     {
-        if(checked==true){
-            serialSendData(2,1);
-        }
-        else {
-            serialSendData(2,0);
-
-        }
+        serialSendData(2,1);
     }else {
         QMessageBox::information(nullptr,"提示","水泵打开失败，串口未打开");
     }
-    ui->pushButtonWaterPump->setChecked(false);
+//    ui->pushButtonWaterPump->setChecked(false);
 }
-//粉阀按钮设置 deviceId:3
-//void MainWindow::on_pushButtonPowderValue_clicked()
-//{
-//    if(serialIsOpen==true){
-//        serialSendData(3,uint8_t(ui->spinBoxPowderValue->value()));
-//    }
-//    else {
-//        QMessageBox::information(nullptr,"提示","粉阀PWM设置失败，串口未打开");
-//    }
-//}
-//粉阀按钮设置 deviceId:3
-void MainWindow::on_pushButtonPowderPump_clicked(bool checked)
+//水泵按钮关闭设置 deviceId:2
+void MainWindow::on_pushButtonWaterPumpOff_clicked()
 {
     if(serialIsOpen==true)
     {
-        if(checked==true){
-            serialSendData(3,1);
-        }
-        else {
-            serialSendData(3,0);
-
-        }
+        serialSendData(2,0);
+    }else {
+        QMessageBox::information(nullptr,"提示","水泵打开失败，串口未打开");
+    }
+}
+//粉阀按钮设置 deviceId:3
+void MainWindow::on_pushButtonPowderPump_clicked()
+{
+    if(serialIsOpen==true)
+    {
+        serialSendData(3,1);
     }else {
         QMessageBox::information(nullptr,"提示","粉阀打开失败，串口未打开");
     }
-    ui->pushButtonPowderPump->setChecked(false);
+}
+//粉阀按钮关闭设置 deviceId:3
+void MainWindow::on_pushButtonPowderPumpOff_clicked()
+{
+    if(serialIsOpen==true)
+    {
+        serialSendData(3,0);
+    }else {
+        QMessageBox::information(nullptr,"提示","粉阀打开失败，串口未打开");
+    }
 }
 //发动机按钮设置 deviceId:4
 //void MainWindow::on_pushButtonEngine_clicked()

@@ -374,7 +374,8 @@ release/main.o: ../main.cpp ../mainwindow.h \
 		D:/Software/QT/5.9.8/mingw53_32/include/QtCore/qeventloop.h \
 		D:/Software/QT/5.9.8/mingw53_32/include/QtWidgets/qdesktopwidget.h \
 		D:/Software/QT/5.9.8/mingw53_32/include/QtGui/qguiapplication.h \
-		D:/Software/QT/5.9.8/mingw53_32/include/QtGui/qinputmethod.h
+		D:/Software/QT/5.9.8/mingw53_32/include/QtGui/qinputmethod.h \
+		D:/Software/QT/5.9.8/mingw53_32/include/QtGui/QFont
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\main.o ..\main.cpp
 
 release/mainwindow.o: ../mainwindow.cpp ../mainwindow.h \
