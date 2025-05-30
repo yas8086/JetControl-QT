@@ -54,7 +54,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 #    img/选中1.png
 
 RESOURCES += \
-    image.qrc
+    image.qrc \
+    style.qrc
 
 RC_FILE += logo.rc
+
+DISTFILES +=
 

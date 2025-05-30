@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qss/verticalslider.qss</file>
+    </qresource>
+</RCC>

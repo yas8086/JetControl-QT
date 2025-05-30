@@ -1,12 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-static uint8_t timeEngineValue = 0;
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+//    //qss
+//    QFile file(":/qss/style.qss");
+//    file.open(QIODevice::ReadOnly);
+//    setStyleSheet(file.readAll());
     ui->setupUi(this);
     setWindowTitle("喷烟控制程序");
     setWindowIcon(QIcon(":/Logo.ico"));
@@ -19,42 +21,52 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButtonSerial->setCheckable(true);
     ui->comboBoxSerial->installEventFilter(this);
     connect(&serial,SIGNAL(readyRead()),this,SLOT(slotrevserialmsg()));
+    //定时器
+    //油泵按钮不可点击定时器
+    timOilButton = new QTimer();
+    timOilButton->setInterval(10);
+    oilPumpCount = 0;
+    connect(timOilButton,SIGNAL(timeout()),this,SLOT(timeoutOilButton()));
+    //油门数据发送节流定时器
+    timThrottle = new QTimer();
+    timThrottle->setInterval(30);
+    connect(timThrottle,SIGNAL(timeout()),this,SLOT(timeOutThrottle()));
     //粉阀
-//    ui->pushButtonPowderPump->setCheckable(true);
     ui->pushButtonPowderLED->setEnabled(false); // 禁用按钮
     //水泵
-//    ui->pushButtonWaterPump->setCheckable(true);
     ui->pushButtonWaterLED->setEnabled(false); // 禁用按钮
-    //粉阀
-    //信号和槽连接QSpinbox&QSlider，使两者的值相互变化。
-//    ui->spinBoxPowderValue->setRange(0,100);
-//    ui->horizontalSliderPowderValue->setRange(0,100);
-//    QObject::connect(ui->spinBoxPowderValue,SIGNAL(valueChanged(int)),ui->horizontalSliderPowderValue,SLOT(setValue(int)));
-//    QObject::connect(ui->horizontalSliderPowderValue,SIGNAL(valueChanged(int)),ui->spinBoxPowderValue,SLOT(setValue(int)));
-//    //发动机
-//    /* 设置页长（两个最大刻度的间距）*/
-//    ui->dialEngine->setPageStep(10);
-//    /* 设置刻度可见 */
-//    ui->dialEngine->setNotchesVisible(true);
-//    /* 设置两个凹槽之间的目标像素数 */
-//    ui->dialEngine->setNotchTarget(1.00);
-//    /* 设置dial值的范围 */
-//    ui->dialEngine->setRange(0,100);
-//    ui->spinBoxEngine->setRange(0,100);
-//    QObject::connect(ui->dialEngine,SIGNAL(valueChanged(int)),ui->spinBoxEngine,SLOT(setValue(int)));
-//    QObject::connect(ui->spinBoxEngine,SIGNAL(valueChanged(int)),ui->dialEngine,SLOT(setValue(int)));
-    //定时器
-//    tim = new QTimer();
-//    //20ms中断一次，一秒50次
-//    tim->setInterval(20);
-//    connect(tim,SIGNAL(timeout()),this,SLOT(timeoutSendData()));
+    //发动机
+    ButtonGroupEngineStatus = new QButtonGroup();
+    ButtonGroupEngineStatus->addButton(ui->pushButtonEngineStart,3);
+    ButtonGroupEngineStatus->addButton(ui->pushButtonEngineStop,2);
+    ButtonGroupEngineStatus->addButton(ui->pushButtonEngineEmergentStop,1);
+    QObject::connect(ui->verticalSliderEngine,SIGNAL(valueChanged(int)),ui->spinBoxEngineValue,SLOT(setValue(int)));
+    QObject::connect(ui->spinBoxEngineValue,SIGNAL(valueChanged(int)),ui->verticalSliderEngine,SLOT(setValue(int)));
+    connect(ui->verticalSliderEngine,SIGNAL(valueChanged(int)),this,SLOT(verticalSliderEngineValueChanged(int)));
+    ui->verticalSliderEngine->setEnabled(false);
+    ui->pushButtonEngineStart->setEnabled(false);
+    ui->pushButtonEngineStop->setEnabled(false);
 
 }
-//定时器槽函数
-//void MainWindow::timeoutSendData()
-//{
-//    serialSendData(4,timeEngineValue);
-//}
+//油泵按钮定时器槽函数
+void MainWindow::timeoutOilButton()
+{
+    if(OilButtonPressFlag == 1){
+        oilPumpCount += 1;
+    }
+    if(oilPumpCount>=120){
+        OilButtonPressFlag = 0;
+        oilPumpCount = 0;
+        ui->pushButtonTestOilPump->setEnabled(true);
+        timOilButton->stop();
+    }
+}
+//串口节流定时器槽函数
+void MainWindow::timeOutThrottle()
+{
+    serialSendEngineData(3,uint8_t(verticalSliderValue));
+    timThrottle->stop();
+}
 //过滤器
 bool MainWindow::eventFilter(QObject* watched, QEvent* event)
 {
@@ -67,7 +79,7 @@ bool MainWindow::eventFilter(QObject* watched, QEvent* event)
         }
     }
 }
-//串口发送数据
+//串口发送泵阀数据
 //deviceId 油泵：1 水泵：2  粉阀：3  发动机：4  复位：5
 void MainWindow::serialSendData(uint8_t deviceId,uint8_t value)
 {
@@ -102,6 +114,39 @@ void MainWindow::serialSendData(uint8_t deviceId,uint8_t value)
     dataSendByteArray.clear();
     dataSend.clear();
 }
+//串口发送涡喷数据
+void MainWindow::serialSendEngineData(uint8_t EngineControlFlag, uint8_t EngineControlValue)
+{
+    QVector<uint8_t> dataSend;
+    uint16_t crc16Value;
+    dataSend.append(0x0E);
+    dataSend.append(EngineControlFlag);
+    dataSend.append(EngineControlValue);
+    crc16Value = crc16Calc(dataSend.data(),3);
+    dataSend.append(crc16Value >> 8);
+    dataSend.append(crc16Value & 0xFF);
+
+    QByteArray dataSendByteArray(reinterpret_cast<const char*>(dataSend.data()), static_cast<int>(dataSend.size()));
+    serial.write(dataSendByteArray);
+    dataSendByteArray.clear();
+    dataSend.clear();
+}
+//串口发送油泵数据
+void MainWindow::serialSendOilPumpData()
+{
+    QVector<uint8_t> dataSend;
+    uint16_t crc16Value;
+    dataSend.append(0x0F);
+    dataSend.append(0x01);
+    crc16Value = crc16Calc(dataSend.data(),2);
+    dataSend.append(crc16Value >> 8);
+    dataSend.append(crc16Value & 0xFF);
+
+    QByteArray dataSendByteArray(reinterpret_cast<const char*>(dataSend.data()), static_cast<int>(dataSend.size()));
+    serial.write(dataSendByteArray);
+    dataSendByteArray.clear();
+    dataSend.clear();
+}
 //串口接收数据
 void MainWindow::slotrevserialmsg()
 {
@@ -128,44 +173,14 @@ void MainWindow::slotrevserialmsg()
         switch (deviceId) {
         //失败
         case 0:
-            switch (deviceValue){
-//            case 1:
-//                ui->pushButtonOilPump->setChecked(true);
-//                break;
-            case 2:
-//                ui->pushButtonWaterPump->setChecked(true);
-                break;
-            case 3:
-//                ui->pushButtonPowderPump->setChecked(true);
-                break;
-            default:
-                break;
-            }
-//            QMessageBox::information(nullptr,"提示","打开失败，请重试！");
             break;
-          //油泵
-//        case 1:
-//            if(deviceValue==1)
-//            {
-//                QMessageBox::information(nullptr,"提示","油泵打开成功");
-//                ui->pushButtonOilPump->setChecked(true);
-//                ui->pushButtonOilPump->setText("油泵已开启，点击关闭");
-//            }
-//            else {
-//                ui->pushButtonOilPump->setText("打开");
-//            }
-//            break;
         //水泵
         case 2:
             if(deviceValue==1)
             {
-//                QMessageBox::information(nullptr,"提示","水泵打开成功");
-//                ui->pushButtonWaterPump->setChecked(true);
                 ui->pushButtonWaterLED->setChecked(true);
-//                ui->pushButtonWaterPump->setText("水泵已开启，点击关闭");
             }
             else {
-//                ui->pushButtonWaterPump->setText("打开");
                 ui->pushButtonWaterLED->setChecked(false);
             }
             break;
@@ -173,10 +188,7 @@ void MainWindow::slotrevserialmsg()
         case 3:
             if(deviceValue==1)
             {
-//                QMessageBox::information(nullptr,"提示","粉阀打开成功");
-//                ui->pushButtonPowderPump->setChecked(true);
                 ui->pushButtonPowderLED->setChecked(true);
-//                ui->pushButtonPowderPump->setText("粉阀已开启，点击关闭");
             }
             else {
                 ui->pushButtonPowderPump->setText("打开");
@@ -187,19 +199,12 @@ void MainWindow::slotrevserialmsg()
         case 4:
             QMessageBox::information(nullptr,"提示","发动机设置成功");
             break;
+        //复位
         case 5:
-            //油泵
-//            ui->pushButtonOilPump->setChecked(false);
-//            ui->pushButtonOilPump->setText("打开");
             //水泵
-//            ui->pushButtonWaterPump->setChecked(false);
             ui->pushButtonWaterLED->setChecked(false);
-//            ui->pushButtonWaterPump->setText("打开");
             //粉阀
-//            ui->spinBoxPowderValue->setValue(0);
-//            ui->pushButtonPowderPump->setChecked(false);
             ui->pushButtonPowderLED->setChecked(false);
-//            ui->pushButtonPowderPump->setText("打开");
             //发动机
 //            ui->spinBoxEngine->setValue(0);
 //            QMessageBox::information(nullptr,"提示","复位成功");
@@ -238,22 +243,6 @@ void MainWindow::on_pushButtonSerial_clicked(bool checked)
 //        ui->pushButtonSerial->setText("打开");
     }
 }
-////油泵按钮设置 deviceId:1
-//void MainWindow::on_pushButtonOilPump_clicked(bool checked)
-//{
-//    if(serialIsOpen==true){
-//        if(checked==true){
-//            serialSendData(1,1);
-//        }
-//        else {
-//            serialSendData(1,0);
-//        }
-//    }
-//    else {
-//        QMessageBox::information(nullptr,"提示","油泵打开失败，串口未打开");
-//    }
-//    ui->pushButtonOilPump->setChecked(false);
-//}
 //水泵按钮设置 deviceId:2
 void MainWindow::on_pushButtonWaterPump_clicked()
 {
@@ -295,17 +284,6 @@ void MainWindow::on_pushButtonPowderPumpOff_clicked()
         QMessageBox::information(nullptr,"提示","粉阀打开失败，串口未打开");
     }
 }
-//发动机按钮设置 deviceId:4
-//void MainWindow::on_pushButtonEngine_clicked()
-//{
-//    if(serialIsOpen==true){
-//        serialSendData(4,uint8_t(ui->spinBoxEngine->value()));
-//        timeEngineValue = uint8_t(ui->spinBoxEngine->value());
-//    }
-//    else {
-//        QMessageBox::information(nullptr,"提示","发动机设置失败，串口未打开");
-//    }
-//}
 //复位按钮设置 deviceId:5
 void MainWindow::on_pushButtonReset_clicked()
 {
@@ -321,6 +299,62 @@ void MainWindow::on_windowTopButton_clicked(bool checked)
 {
     setWindowFlag(Qt::WindowStaysOnTopHint, checked);
     show();
+}
+//开启控制按钮槽函数
+void MainWindow::on_pushButtonEngineControl_clicked(bool checked)
+{
+    ButtonGroupEngineStatus->button(1)->setChecked(true);
+    if(checked){
+        ui->pushButtonEngineStart->setEnabled(true);
+        ui->pushButtonEngineStop->setEnabled(true);
+    }
+    else {
+        ui->verticalSliderEngine->setValue(0);
+        ui->pushButtonEngineStart->setEnabled(false);
+        ui->pushButtonEngineStop->setEnabled(false);
+        ui->verticalSliderEngine->setEnabled(false);
+    }
+}
+//启动按钮槽函数
+void MainWindow::on_pushButtonEngineStart_clicked()
+{
+    serialSendEngineData(3,0);
+    ui->verticalSliderEngine->setEnabled(true);
+}
+//停车按钮槽函数
+void MainWindow::on_pushButtonEngineStop_clicked()
+{
+    serialSendEngineData(2,0);
+    ui->verticalSliderEngine->setValue(0);
+    ui->verticalSliderEngine->setEnabled(false);
+}
+//紧急停车按钮槽函数
+void MainWindow::on_pushButtonEngineEmergentStop_clicked()
+{
+    serialSendEngineData(1,0);
+    ui->verticalSliderEngine->setValue(0);
+    ui->verticalSliderEngine->setEnabled(false);
+}
+//滑动条值变化槽函数
+void MainWindow::verticalSliderEngineValueChanged(int val)
+{
+//    qDebug() << "valueChanged" << val;
+    verticalSliderValue = val;
+    if(ButtonGroupEngineStatus->checkedId()==3){
+        if (!timThrottle->isActive()) {
+            timThrottle->start();
+        }
+    }
+}
+//测试油泵按钮槽函数
+void MainWindow::on_pushButtonTestOilPump_clicked()
+{
+    //开启1.2S油泵，1.2S内油泵按钮不可点击
+    OilButtonPressFlag = 1;
+    timOilButton->start();
+    ui->pushButtonTestOilPump->setEnabled(false);
+    serialSendOilPumpData();
+
 }
 //16位CRC校验
 uint16_t MainWindow::crc16Calc(uint8_t *data, uint8_t len) {
