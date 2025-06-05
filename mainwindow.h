@@ -48,8 +48,6 @@ private:
     uint16_t crc16Calc(uint8_t *data, uint8_t len);
     uint8_t crc8Calc(uint8_t *data, uint8_t len);
     void serialSendData(uint8_t deviceId,uint8_t value);
-    void serialSendEngineData(uint8_t EngineControlFlag, uint8_t EngineControlValue);
-    void serialSendOilPumpData();
 private slots:
     void timeoutOilButton();
     void timeOutThrottle();

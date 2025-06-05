@@ -64,7 +64,7 @@ void MainWindow::timeoutOilButton()
 //串口节流定时器槽函数
 void MainWindow::timeOutThrottle()
 {
-    serialSendEngineData(3,uint8_t(verticalSliderValue));
+    serialSendData(0xC0,uint8_t(verticalSliderValue));
     timThrottle->stop();
 }
 //过滤器
@@ -80,7 +80,9 @@ bool MainWindow::eventFilter(QObject* watched, QEvent* event)
     }
 }
 //串口发送泵阀数据
-//deviceId 油泵：1 水泵：2  粉阀：3  发动机：4  复位：5
+//泵阀    functionID:0x0A  deviceId   水泵：2  粉阀：3
+//发动机  functionID:0x0B  deviceId    油泵：1 发动机紧急停车：0xA0  发动机停车：0xB0 发动机启动：0xC0
+//复位    functionID:0x0C  deviceId   复位：5
 void MainWindow::serialSendData(uint8_t deviceId,uint8_t value)
 {
     QVector<uint8_t> dataSend;
@@ -88,16 +90,15 @@ void MainWindow::serialSendData(uint8_t deviceId,uint8_t value)
     uint8_t functionID;
     dataSend.append(0x0C);
     switch (deviceId) {
-    case 1: case 2: case 3:
+    case 2: case 3:
         functionID = 0x0A;
         break;
-    case 4:
+    case 1: case 0xA0: case 0xB0: case 0xC0:
         functionID = 0x0B;
         break;
     case 5:
         functionID = 0x0C;
         break;
-
     default:
         qWarning() << "Invalid deviceId:" << deviceId;
         return;
@@ -115,38 +116,38 @@ void MainWindow::serialSendData(uint8_t deviceId,uint8_t value)
     dataSend.clear();
 }
 //串口发送涡喷数据
-void MainWindow::serialSendEngineData(uint8_t EngineControlFlag, uint8_t EngineControlValue)
-{
-    QVector<uint8_t> dataSend;
-    uint16_t crc16Value;
-    dataSend.append(0x0E);
-    dataSend.append(EngineControlFlag);
-    dataSend.append(EngineControlValue);
-    crc16Value = crc16Calc(dataSend.data(),3);
-    dataSend.append(crc16Value >> 8);
-    dataSend.append(crc16Value & 0xFF);
+//void MainWindow::serialSendEngineData(uint8_t EngineControlFlag, uint8_t EngineControlValue)
+//{
+//    QVector<uint8_t> dataSend;
+//    uint16_t crc16Value;
+//    dataSend.append(0x0E);
+//    dataSend.append(EngineControlFlag);
+//    dataSend.append(EngineControlValue);
+//    crc16Value = crc16Calc(dataSend.data(),3);
+//    dataSend.append(crc16Value >> 8);
+//    dataSend.append(crc16Value & 0xFF);
 
-    QByteArray dataSendByteArray(reinterpret_cast<const char*>(dataSend.data()), static_cast<int>(dataSend.size()));
-    serial.write(dataSendByteArray);
-    dataSendByteArray.clear();
-    dataSend.clear();
-}
+//    QByteArray dataSendByteArray(reinterpret_cast<const char*>(dataSend.data()), static_cast<int>(dataSend.size()));
+//    serial.write(dataSendByteArray);
+//    dataSendByteArray.clear();
+//    dataSend.clear();
+//}
 //串口发送油泵数据
-void MainWindow::serialSendOilPumpData()
-{
-    QVector<uint8_t> dataSend;
-    uint16_t crc16Value;
-    dataSend.append(0x0F);
-    dataSend.append(0x01);
-    crc16Value = crc16Calc(dataSend.data(),2);
-    dataSend.append(crc16Value >> 8);
-    dataSend.append(crc16Value & 0xFF);
+//void MainWindow::serialSendOilPumpData()
+//{
+//    QVector<uint8_t> dataSend;
+//    uint16_t crc16Value;
+//    dataSend.append(0x0F);
+//    dataSend.append(0x01);
+//    crc16Value = crc16Calc(dataSend.data(),2);
+//    dataSend.append(crc16Value >> 8);
+//    dataSend.append(crc16Value & 0xFF);
 
-    QByteArray dataSendByteArray(reinterpret_cast<const char*>(dataSend.data()), static_cast<int>(dataSend.size()));
-    serial.write(dataSendByteArray);
-    dataSendByteArray.clear();
-    dataSend.clear();
-}
+//    QByteArray dataSendByteArray(reinterpret_cast<const char*>(dataSend.data()), static_cast<int>(dataSend.size()));
+//    serial.write(dataSendByteArray);
+//    dataSendByteArray.clear();
+//    dataSend.clear();
+//}
 //串口接收数据
 void MainWindow::slotrevserialmsg()
 {
@@ -197,7 +198,7 @@ void MainWindow::slotrevserialmsg()
             break;
         //发动机
         case 4:
-            QMessageBox::information(nullptr,"提示","发动机设置成功");
+//            QMessageBox::information(this,"提示","发动机设置成功");
             break;
         //复位
         case 5:
@@ -205,9 +206,6 @@ void MainWindow::slotrevserialmsg()
             ui->pushButtonWaterLED->setChecked(false);
             //粉阀
             ui->pushButtonPowderLED->setChecked(false);
-            //发动机
-//            ui->spinBoxEngine->setValue(0);
-//            QMessageBox::information(nullptr,"提示","复位成功");
             break;
         default:
             break;
@@ -229,13 +227,12 @@ void MainWindow::on_pushButtonSerial_clicked(bool checked)
         serial.setFlowControl(QSerialPort::NoFlowControl);
         if(!serial.open(QIODevice::ReadWrite))
         {
-            QMessageBox::critical(nullptr,"提示","串口打开失败");
+            QMessageBox::critical(this,"提示","串口打开失败");
             ui->pushButtonSerial->setChecked(false);
         }
         else {
             serialIsOpen = true;
-            QMessageBox::information(nullptr,"提示","串口打开成功");
-//            ui->pushButtonSerial->setText("点击关闭");
+            QMessageBox::information(this,"提示","串口打开成功");
         }
     }else {
         serial.close();
@@ -250,9 +247,8 @@ void MainWindow::on_pushButtonWaterPump_clicked()
     {
         serialSendData(2,1);
     }else {
-        QMessageBox::information(nullptr,"提示","水泵打开失败，串口未打开");
+        QMessageBox::information(this,"提示","水泵打开失败，串口未打开");
     }
-//    ui->pushButtonWaterPump->setChecked(false);
 }
 //水泵按钮关闭设置 deviceId:2
 void MainWindow::on_pushButtonWaterPumpOff_clicked()
@@ -261,7 +257,7 @@ void MainWindow::on_pushButtonWaterPumpOff_clicked()
     {
         serialSendData(2,0);
     }else {
-        QMessageBox::information(nullptr,"提示","水泵打开失败，串口未打开");
+        QMessageBox::information(this,"提示","水泵打开失败，串口未打开");
     }
 }
 //粉阀按钮设置 deviceId:3
@@ -271,7 +267,7 @@ void MainWindow::on_pushButtonPowderPump_clicked()
     {
         serialSendData(3,1);
     }else {
-        QMessageBox::information(nullptr,"提示","粉阀打开失败，串口未打开");
+        QMessageBox::information(this,"提示","粉阀打开失败，串口未打开");
     }
 }
 //粉阀按钮关闭设置 deviceId:3
@@ -281,7 +277,7 @@ void MainWindow::on_pushButtonPowderPumpOff_clicked()
     {
         serialSendData(3,0);
     }else {
-        QMessageBox::information(nullptr,"提示","粉阀打开失败，串口未打开");
+        QMessageBox::information(this,"提示","粉阀打开失败，串口未打开");
     }
 }
 //复位按钮设置 deviceId:5
@@ -291,7 +287,7 @@ void MainWindow::on_pushButtonReset_clicked()
         serialSendData(5,1);
     }
     else {
-        QMessageBox::information(nullptr,"提示","复位失败，串口未打开");
+        QMessageBox::information(this,"提示","复位失败，串口未打开");
     }
 }
 //窗口置顶按钮槽函数
@@ -307,38 +303,40 @@ void MainWindow::on_pushButtonEngineControl_clicked(bool checked)
     if(checked){
         ui->pushButtonEngineStart->setEnabled(true);
         ui->pushButtonEngineStop->setEnabled(true);
+        ui->pushButtonTestOilPump->setEnabled(false);
     }
     else {
         ui->verticalSliderEngine->setValue(0);
         ui->pushButtonEngineStart->setEnabled(false);
         ui->pushButtonEngineStop->setEnabled(false);
         ui->verticalSliderEngine->setEnabled(false);
+        ui->pushButtonTestOilPump->setEnabled(true);
+        serialSendData(0xA0,0);
     }
 }
 //启动按钮槽函数
 void MainWindow::on_pushButtonEngineStart_clicked()
 {
-    serialSendEngineData(3,0);
+    serialSendData(0xC0,0);
     ui->verticalSliderEngine->setEnabled(true);
 }
 //停车按钮槽函数
 void MainWindow::on_pushButtonEngineStop_clicked()
 {
-    serialSendEngineData(2,0);
+    serialSendData(0xB0,0);
     ui->verticalSliderEngine->setValue(0);
     ui->verticalSliderEngine->setEnabled(false);
 }
 //紧急停车按钮槽函数
 void MainWindow::on_pushButtonEngineEmergentStop_clicked()
 {
-    serialSendEngineData(1,0);
+    serialSendData(0xA0,0);
     ui->verticalSliderEngine->setValue(0);
     ui->verticalSliderEngine->setEnabled(false);
 }
 //滑动条值变化槽函数
 void MainWindow::verticalSliderEngineValueChanged(int val)
 {
-//    qDebug() << "valueChanged" << val;
     verticalSliderValue = val;
     if(ButtonGroupEngineStatus->checkedId()==3){
         if (!timThrottle->isActive()) {
@@ -353,7 +351,7 @@ void MainWindow::on_pushButtonTestOilPump_clicked()
     OilButtonPressFlag = 1;
     timOilButton->start();
     ui->pushButtonTestOilPump->setEnabled(false);
-    serialSendOilPumpData();
+    serialSendData(1,1);
 
 }
 //16位CRC校验
