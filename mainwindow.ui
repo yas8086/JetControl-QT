@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>628</width>
-    <height>520</height>
+    <width>1200</width>
+    <height>800</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -16,24 +28,221 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
     <item row="3" column="0">
-     <widget class="QGroupBox" name="gridGroupBox">
-      <property name="title">
-       <string>复位控制</string>
+     <widget class="QGroupBox" name="gridGroupBox_2">
+      <property name="styleSheet">
+       <string notr="true">QGroupBox {
+    border: 1px solid rgb(75, 75, 75);   
+    border-radius: 5px;          /* 圆角半径 */
+    margin: 5px;             /* 为标题预留空间 */
+	padding-top: 20px;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;   /* 标题基于margin区域定位 */
+    subcontrol-position: top center; /* 标题居中 */
+    
+}</string>
       </property>
-      <layout class="QGridLayout" name="gridLayout_6">
+      <property name="title">
+       <string>测试油泵</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="0" column="3">
+        <widget class="QPushButton" name="pushButtonOilPumpLED">
+         <property name="minimumSize">
+          <size>
+           <width>38</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>38</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+border-image: url(:/img/指示灯-红.png);
+}
+QPushButton::checked
+{
+border-image: url(:/img/指示灯-绿.png);
+}
+QPushButton::unchecked
+{
+border-image: url(:/img/指示灯-红.png);
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout">
+        <widget class="QPushButton" name="pushButtonTestOilPump">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>测试油泵(短时)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <widget class="QLabel" name="label_10">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>油泵电压：</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="5">
+        <widget class="QLineEdit" name="lineEditPumpVoltage">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>400</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="GroupBoxSeries">
+      <property name="styleSheet">
+       <string notr="true">QGroupBox {
+    border: 1px solid rgb(75, 75, 75);   
+    border-radius: 5px;          /* 圆角半径 */
+    margin: 5px;             /* 为标题预留空间 */
+	padding-top: 20px;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;   /* 标题基于margin区域定位 */
+    subcontrol-position: top center; /* 标题居中 */
+    
+}</string>
+      </property>
+      <property name="title">
+       <string>串口设置</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QLabel" name="label_6">
+          <widget class="QLabel" name="label_3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
-            <string>复位</string>
+            <string>选择串口</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButtonReset">
+          <widget class="QComboBox" name="comboBoxSerial">
+           <property name="maximumSize">
+            <size>
+             <width>400</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButtonSerial">
+           <property name="minimumSize">
+            <size>
+             <width>87</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>87</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+border-image: url(:/img/btncheckoff2.png);
+}
+QPushButton::checked
+{
+border-image: url(:/img/btncheckon2.png);
+}
+QPushButton::unchecked
+{
+border-image: url(:/img/btncheckoff2.png);
+}</string>
+           </property>
            <property name="text">
-            <string>全部关闭</string>
+            <string/>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>87</width>
+             <height>28</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="windowTopButton">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>38</width>
+             <height>38</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>38</width>
+             <height>38</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+border-image: url(:/img/窗口置顶.png);
+}
+QPushButton::checked
+{
+border-image: url(:/img/已置顶.png);
+}
+QPushButton::unchecked
+{
+border-image: url(:/img/窗口置顶.png);
+}</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -44,6 +253,19 @@
     </item>
     <item row="1" column="0" rowspan="2">
      <widget class="QGroupBox" name="GroupBoxValve">
+      <property name="styleSheet">
+       <string notr="true">QGroupBox {
+    border: 1px solid rgb(75, 75, 75);   
+    border-radius: 5px;          /* 圆角半径 */
+    margin: 5px;             /* 为标题预留空间 */
+	padding-top: 20px;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;   /* 标题基于margin区域定位 */
+    subcontrol-position: top center; /* 标题居中 */
+    
+}</string>
+      </property>
       <property name="title">
        <string>阀门控制</string>
       </property>
@@ -55,6 +277,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QLabel" name="label_4">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>水泵</string>
            </property>
@@ -62,6 +290,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="pushButtonWaterPump">
+           <property name="maximumSize">
+            <size>
+             <width>400</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="text">
             <string>打开</string>
            </property>
@@ -69,6 +303,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="pushButtonWaterPumpOff">
+           <property name="maximumSize">
+            <size>
+             <width>400</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="text">
             <string>关闭</string>
            </property>
@@ -119,6 +359,12 @@ border-image: url(:/img/指示灯-红.png);
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QLabel" name="label_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>粉阀</string>
            </property>
@@ -126,6 +372,12 @@ border-image: url(:/img/指示灯-红.png);
          </item>
          <item>
           <widget class="QPushButton" name="pushButtonPowderPump">
+           <property name="maximumSize">
+            <size>
+             <width>400</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="text">
             <string>打开</string>
            </property>
@@ -133,6 +385,12 @@ border-image: url(:/img/指示灯-红.png);
          </item>
          <item>
           <widget class="QPushButton" name="pushButtonPowderPumpOff">
+           <property name="maximumSize">
+            <size>
+             <width>400</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="text">
             <string>关闭</string>
            </property>
@@ -179,117 +437,137 @@ border-image: url(:/img/指示灯-红.png);
          </item>
         </layout>
        </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QGroupBox" name="GroupBoxSeries">
-      <property name="title">
-       <string>串口设置</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_4">
-       <item row="0" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item row="3" column="1" colspan="2">
+        <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="label_6">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
-            <string>选择串口</string>
+            <string>复位</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBoxSerial"/>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButtonSerial">
-           <property name="minimumSize">
-            <size>
-             <width>87</width>
-             <height>28</height>
-            </size>
-           </property>
+          <widget class="QPushButton" name="pushButtonReset">
            <property name="maximumSize">
             <size>
-             <width>87</width>
-             <height>28</height>
+             <width>800</width>
+             <height>16777215</height>
             </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton
-{
-border-image: url(:/img/btncheckoff2.png);
-}
-QPushButton::checked
-{
-border-image: url(:/img/btncheckon2.png);
-}
-QPushButton::unchecked
-{
-border-image: url(:/img/btncheckoff2.png);
-}</string>
            </property>
            <property name="text">
-            <string/>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>87</width>
-             <height>28</height>
-            </size>
+            <string>全部关闭</string>
            </property>
           </widget>
          </item>
         </layout>
-       </item>
-       <item row="0" column="1">
-        <widget class="QPushButton" name="windowTopButton">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton
-{
-border-image: url(:/img/窗口置顶.png);
-}
-QPushButton::checked
-{
-border-image: url(:/img/已置顶.png);
-}
-QPushButton::unchecked
-{
-border-image: url(:/img/窗口置顶.png);
-}</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>
     </item>
     <item row="0" column="1" rowspan="4" colspan="2">
      <widget class="QGroupBox" name="gridGroupBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QGroupBox {
+    border: 1px solid rgb(75, 75, 75);   
+    border-radius: 5px;          /* 圆角半径 */
+    margin: 5px;             /* 为标题预留空间 */
+	padding-top: 20px;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;   /* 标题基于margin区域定位 */
+    subcontrol-position: top center; /* 标题居中 */
+    
+}</string>
+      </property>
       <property name="title">
        <string>发动机控制</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="4" column="0">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_8">
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>当前电流：</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="lineEditPowerVoltage">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>动力电压：</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QLineEdit" name="lineEditCurrent">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>引擎状态：</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>错误信息：</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineEditEngineState">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="3">
+          <widget class="QLineEdit" name="lineEditECode">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="0" rowspan="4">
         <widget class="QGroupBox" name="gridGroupBox">
          <property name="title">
           <string>油门控制</string>
@@ -299,9 +577,15 @@ border-image: url(:/img/窗口置顶.png);
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
              <widget class="QSlider" name="verticalSliderEngine">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
-                <width>68</width>
+                <width>200</width>
                 <height>0</height>
                </size>
               </property>
@@ -309,41 +593,25 @@ border-image: url(:/img/窗口置顶.png);
                <string notr="true">/* 绿色宽版垂直滑块样式 */
 QSlider::groove:vertical {
     background: #37474F;
-    width:800px;  /* 加宽轨道 */
+    width:200px;  /* 加宽轨道 */
 }
-
+/* 绿色宽版垂直滑块样式 */
 QSlider::handle:vertical {
-    background: rgb(255, 255, 255);
-    width: 50px;  /* 加大手柄 */
-    height: 20px;
+    background: rgb(0, 255, 0);
+    width: 110px;  /* 加大手柄 */
+    height: 30px;
 
 }
-
-QSlider::sub-page:vertical {
-    background: #455A64;
-    border: 1px solid #1B5E20;
-    border-radius: 15px;
-}
-
+/* 未划过的 */
 QSlider::add-page:vertical {
     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
                            stop:0 #2E7D32, stop:0.5 #4CAF50, stop:1 #81C784);
-    border: 1px solid #37474F;
-    border-radius: 15px;
+   
 }
-
-QSlider::handle:vertical:hover {
-    background: qradialgradient(cx:0.5, cy:0.5, radius:0.5, 
-                           fx:0.5, fy:0.5, 
-                           stop:0.8 white, stop:1.0 #81C784);
-    border-color: #388E3C;
-}
-
-QSlider::handle:vertical:pressed {
-    background: qradialgradient(cx:0.5, cy:0.5, radius:0.5, 
-                           fx:0.5, fy:0.5, 
-                           stop:0.8 white, stop:1.0 #1B5E20);
-    border-color: #1B5E20;
+/* 划过的 */
+QSlider::sub-page:vertical {
+    background: #455A64;
+    
 }</string>
               </property>
               <property name="maximum">
@@ -356,6 +624,18 @@ QSlider::handle:vertical:pressed {
             </item>
             <item>
              <widget class="QSpinBox" name="spinBoxEngineValue">
+              <property name="minimumSize">
+               <size>
+                <width>200</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="maximum">
                <number>100</number>
               </property>
@@ -367,10 +647,22 @@ QSlider::handle:vertical:pressed {
            <layout class="QVBoxLayout" name="verticalLayout">
             <item>
              <widget class="QPushButton" name="pushButtonEngineControl">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="styleSheet">
-               <string notr="true">QPushButton::checked
+               <string notr="true">QPushButton
 {
-	background-color: rgb(255, 85, 0);
+	background-color: rgb(255, 80, 11);
+border: 1px solid rgba(255, 255, 255, 0.1);
+}
+QPushButton::checked
+{
+	background-color: rgb(0, 150, 0);
+border: 1px solid rgba(255, 255, 255, 0.1);
 }</string>
               </property>
               <property name="text">
@@ -383,10 +675,17 @@ QSlider::handle:vertical:pressed {
             </item>
             <item>
              <widget class="QPushButton" name="pushButtonEngineStart">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="styleSheet">
                <string notr="true">QPushButton::checked
 {
 	background-color: rgb(85, 255, 127);
+	border: 1px solid rgba(255, 255, 255, 0.1);
 }</string>
               </property>
               <property name="text">
@@ -402,10 +701,17 @@ QSlider::handle:vertical:pressed {
             </item>
             <item>
              <widget class="QPushButton" name="pushButtonEngineStop">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="styleSheet">
                <string notr="true">QPushButton::checked
 {
 	background-color: rgb(85, 255, 127);
+border: 1px solid rgba(255, 255, 255, 0.1);
 }</string>
               </property>
               <property name="text">
@@ -421,10 +727,17 @@ QSlider::handle:vertical:pressed {
             </item>
             <item>
              <widget class="QPushButton" name="pushButtonEngineEmergentStop">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="styleSheet">
                <string notr="true">QPushButton::checked
 {
 	background-color: rgb(85, 255, 127);
+border: 1px solid rgba(255, 255, 255, 0.1);
 }</string>
               </property>
               <property name="text">
@@ -446,6 +759,23 @@ QSlider::handle:vertical:pressed {
           <item row="6" column="0" colspan="4">
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
+             <widget class="QLabel" name="label_11">
+              <property name="text">
+               <string>排气温度：</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="lineEditTemp">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QLabel" name="label">
               <property name="text">
                <string>转速：</string>
@@ -453,101 +783,19 @@ QSlider::handle:vertical:pressed {
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit"/>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+             <widget class="QLineEdit" name="lineEditEngineRPM">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
+             </widget>
             </item>
            </layout>
           </item>
          </layout>
         </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QGroupBox" name="gridGroupBox_2">
-         <property name="title">
-          <string>测试油泵</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_7">
-          <item row="0" column="0">
-           <widget class="QPushButton" name="pushButtonTestOilPump">
-            <property name="text">
-             <string>测试油泵(短时)</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QPushButton" name="pushButtonOilPumpLED">
-            <property name="minimumSize">
-             <size>
-              <width>38</width>
-              <height>38</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>38</width>
-              <height>38</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton
-{
-border-image: url(:/img/指示灯-红.png);
-}
-QPushButton::checked
-{
-border-image: url(:/img/指示灯-绿.png);
-}
-QPushButton::unchecked
-{
-border-image: url(:/img/指示灯-红.png);
-}</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>电压：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_2"/>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
        </item>
       </layout>
      </widget>
